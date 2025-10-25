@@ -41,16 +41,15 @@ services:
       # - No need to rebuild image for code changes
     
     # Command to start the Django development server
-    command: >
-      python /app/manage.py runserver 0.0.0.0:8000
-      # Breakdown:
-      # - python: Uses Python from virtual environment (PATH=/py/bin:$PATH)
-      # - /app/manage.py: Django's management script
-      # - runserver: Django command to start development server
-      # - 0.0.0.0:8000: Bind to ALL interfaces on port 8000
-      #   * 0.0.0.0 (not 127.0.0.1) allows external Docker connections
-      #   * Port 8000 matches EXPOSE 8000 in Dockerfile
-      #   * Enables access from host machine via port mapping
+    # Breakdown:
+    # - python: Uses Python from virtual environment (PATH=/py/bin:$PATH)
+    # - manage.py: Django's management script (in /app working directory)
+    # - runserver: Django command to start development server
+    # - 0.0.0.0:8000: Bind to ALL interfaces on port 8000
+    #   * 0.0.0.0 (not 127.0.0.1) allows external Docker connections
+    #   * Port 8000 matches EXPOSE 8000 in Dockerfile
+    #   * Enables access from host machine via port mapping
+    command: python manage.py runserver 0.0.0.0:8000
     
     # Environment variables (optional - can be added here)
     # environment:
