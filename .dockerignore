@@ -1,0 +1,67 @@
+# .dockerignore - Excludes files and directories from Docker build context
+# This file works similarly to .gitignore but for Docker builds
+# Files listed here won't be sent to the Docker daemon during build
+# This reduces build context size and improves build performance
+
+# Git version control files
+# These aren't needed in the container and can contain sensitive history
+.git
+.gitignore
+
+# Local development requirements
+# These are for local Python 3.14, not for Docker Python 3.9
+requirements.local.txt
+
+# Docker-related files
+# Avoid recursive Docker builds and unnecessary Docker files
+.docker
+
+# Python runtime files and virtual environments
+# __pycache__ directories contain compiled Python bytecode (.pyc files)
+# These are automatically regenerated and don't need to be copied
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+
+# Virtual environment directories
+# These contain local Python installations and packages
+# Docker creates its own environment, so local venvs aren't needed
+.env/
+.venv/
+venv/
+
+# Development and IDE files
+# These are only needed for local development
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS-specific files
+# System files that shouldn't be in containers
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Documentation and development files
+# These aren't needed for running the application
+README.md
+*.md
+docs/
+
+# Test files and coverage reports
+# Tests run separately, not needed in production containers
+tests/
+test_*.py
+*_test.py
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Log files and temporary data
+# These should be handled by container logging and volumes
+*.log
+logs/
+tmp/

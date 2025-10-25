@@ -1,0 +1,61 @@
+
+# Docker Compose configuration for Django Recipe API
+# This file defines how to run the application in containers
+version: "3.9"
+
+# Services define the different containers that make up your application
+services:
+  app:
+    # Build configuration
+    build:
+      context: .  # Use Dockerfile in current directory (recipe-app-api/)
+      # This builds the image using your Dockerfile which:
+      # - Sets up Python 3.9 Alpine environment
+      # - Creates virtual environment at /py
+      # - Installs dependencies from requirements.txt
+      # - Creates django-user for security
+      
+      # Build arguments passed to Dockerfile during build process
+      args:
+        - DEV=true  # Development mode flag
+        # This build argument can be used in Dockerfile with ARG DEV
+        # Enables conditional installation of development dependencies
+        # Examples of dev-only packages:
+        # - flake8 (code linting)
+        # - pytest (testing framework)  
+        # - django-debug-toolbar (debugging tools)
+        # - Coverage tools for test reporting
+        # Production builds would set DEV=false to exclude these
+    
+    # Port mapping: host:container
+    ports:
+      - "8000:8000"  # Map localhost:8000 -> container:8000
+      # Allows you to access the app at http://localhost:8000
+    
+    # Volume mounting for development
+    volumes:
+      - ./app:/app  # Mount local ./app directory to /app in container
+      # Benefits:
+      # - Live code reloading during development
+      # - Changes made locally appear instantly in container
+      # - No need to rebuild image for code changes
+    
+    # Command to start the Django development server
+    command: >
+      python /app/manage.py runserver 0.0.0.0:8000
+      # Breakdown:
+      # - python: Uses Python from virtual environment (PATH=/py/bin:$PATH)
+      # - /app/manage.py: Django's management script
+      # - runserver: Django command to start development server
+      # - 0.0.0.0:8000: Bind to ALL interfaces on port 8000
+      #   * 0.0.0.0 (not 127.0.0.1) allows external Docker connections
+      #   * Port 8000 matches EXPOSE 8000 in Dockerfile
+      #   * Enables access from host machine via port mapping
+    
+    # Environment variables (optional - can be added here)
+    # environment:
+    #   - DEBUG=1
+    #   - SECRET_KEY=your-secret-key
+    
+    # Container will run as django-user (from Dockerfile USER directive)
+    # Provides security by not running as root
