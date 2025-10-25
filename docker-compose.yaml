@@ -1,7 +1,7 @@
 
 # Docker Compose configuration for Django Recipe API
 # This file defines how to run the application in containers
-version: "3.9"
+#version: "3.9"
 
 # Services define the different containers that make up your application
 services:
