@@ -50,6 +50,13 @@ services:
     #   * Port 8000 matches EXPOSE 8000 in Dockerfile
     #   * Enables access from host machine via port mapping
     command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DB_HOST=db  # Database host points to 'db' service
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=changeme
+    depends_on:
+      - db  # Ensure 'db' service starts before 'app'
     
     # Environment variables (optional - can be added here)
     # environment:
@@ -58,3 +65,20 @@ services:
     
     # Container will run as django-user (from Dockerfile USER directive)
     # Provides security by not running as root
+
+  db:
+    # Database service using PostgreSQL
+    image: postgres:13-alpine  # Official lightweight Postgres image
+    ports:
+      - "5432:5432"  # Expose Postgres port for local access (optional)
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data  # Persist database data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+  volumes:
+    dev-db-data:
+      # Volume to persist database data
+      # Ensures data is not lost when container stops/removes
