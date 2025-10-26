@@ -49,7 +49,10 @@ services:
     #   * 0.0.0.0 (not 127.0.0.1) allows external Docker connections
     #   * Port 8000 matches EXPOSE 8000 in Dockerfile
     #   * Enables access from host machine via port mapping
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db  # Database host points to 'db' service
       - DB_NAME=devdb
