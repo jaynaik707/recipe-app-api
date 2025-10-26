@@ -78,7 +78,8 @@ services:
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
 
-  volumes:
-    dev-db-data:
-      # Volume to persist database data
-      # Ensures data is not lost when container stops/removes
+# Named volumes for data persistence
+volumes:
+  dev-db-data:
+    # Volume to persist database data
+    # Ensures data is not lost when container stops/removes
