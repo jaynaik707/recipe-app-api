@@ -1,0 +1,14 @@
+[flake8]
+exclude =
+  venv,
+  .venv,
+  env,
+  .git,
+  __pycache__,
+  migrations,
+  .github,
+  .dockerignore,
+  Dockerfile,
+  docker-compose.yaml,
+  requirements*.txt
+max-line-length = 88
